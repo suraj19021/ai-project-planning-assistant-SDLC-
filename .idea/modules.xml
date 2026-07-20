@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/SDLC project.iml" filepath="$PROJECT_DIR$/.idea/SDLC project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ai-project-planner/ai-project-planner.iml" filepath="$PROJECT_DIR$/ai-project-planner/ai-project-planner.iml" />
     </modules>
   </component>
 </project>
