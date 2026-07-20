@@ -1,4 +1,10 @@
 package com.aiplanner.aiprojectplanner.enums;
 
-public class DocumentType {
+public enum DocumentType {
+
+    PDF,
+    DOCX,
+    TXT,
+    UNKNOWN
+
 }
