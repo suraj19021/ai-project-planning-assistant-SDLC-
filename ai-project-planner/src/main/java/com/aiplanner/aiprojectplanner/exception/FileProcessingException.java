@@ -1,4 +1,12 @@
 package com.aiplanner.aiprojectplanner.exception;
 
-public class FileProcessingException {
+public class FileProcessingException extends RuntimeException {
+
+    public FileProcessingException(String message) {
+        super(message);
+    }
+
+    public FileProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
