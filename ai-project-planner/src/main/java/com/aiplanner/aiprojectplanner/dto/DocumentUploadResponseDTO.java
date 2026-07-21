@@ -18,4 +18,6 @@ public class DocumentUploadResponseDTO {
 
     private String status;
 
+    private String extractedText;
+
 }
