@@ -1,6 +1,5 @@
 package com.aiplanner.aiprojectplanner.dto;
 
-import com.aiplanner.aiprojectplanner.enums.ProjectStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,24 +11,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectResponseDTO {
+public class AIProjectAnalysisDTO {
 
     private String executiveSummary;
 
     private String projectObjective;
 
-    private List<ModuleDTO> modules;
+    private List<String> functionalModules;
 
-    private List<SprintPlanDTO> sprintPlans;
+    private String technologyStack;
+
+    private String sprintPlan;
 
     private String timeline;
 
     private String resourceRecommendation;
-
-    private String technologyStack;
-
-    private String riskAnalysis;
-
-    private ProjectStatus status;
-
 }

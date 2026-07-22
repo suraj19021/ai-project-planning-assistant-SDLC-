@@ -20,4 +20,6 @@ public class DocumentUploadResponseDTO {
 
     private String extractedText;
 
+    private String executiveSummary;
+
 }
