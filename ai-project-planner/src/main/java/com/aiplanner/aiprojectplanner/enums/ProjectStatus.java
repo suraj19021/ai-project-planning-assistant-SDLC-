@@ -1,4 +1,11 @@
 package com.aiplanner.aiprojectplanner.enums;
 
-public class ProjectStatus {
+public enum ProjectStatus {
+
+    UPLOADED,
+    ANALYZING,
+    ANALYZED,
+    PLANNED,
+    FAILED
+
 }
