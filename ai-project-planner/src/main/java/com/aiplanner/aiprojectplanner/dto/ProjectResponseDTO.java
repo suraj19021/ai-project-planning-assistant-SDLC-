@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectResponseDTO {
 
+    private String projectName;
+
     private String executiveSummary;
 
     private String projectObjective;
