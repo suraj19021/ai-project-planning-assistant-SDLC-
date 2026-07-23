@@ -1,4 +1,10 @@
 package com.aiplanner.aiprojectplanner.service;
 
-public class ProjectService {
+import com.aiplanner.aiprojectplanner.dto.ProjectRequestDTO;
+import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
+
+public interface ProjectService {
+
+    ProjectResponseDTO analyzeProject(ProjectRequestDTO request);
+
 }

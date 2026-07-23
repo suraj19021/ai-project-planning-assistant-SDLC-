@@ -1,8 +1,10 @@
 package com.aiplanner.aiprojectplanner.service;
 
+import com.aiplanner.aiprojectplanner.ai.AIService;
 import com.aiplanner.aiprojectplanner.document.DocxExtractor;
 import com.aiplanner.aiprojectplanner.document.PDFExtractor;
 import com.aiplanner.aiprojectplanner.document.TextExtractor;
+import com.aiplanner.aiprojectplanner.dto.AIProjectAnalysisDTO;
 import com.aiplanner.aiprojectplanner.dto.DocumentUploadResponseDTO;
 import com.aiplanner.aiprojectplanner.enums.DocumentType;
 import com.aiplanner.aiprojectplanner.exception.FileProcessingException;
@@ -14,6 +16,12 @@ import java.io.IOException;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
+
+    private final AIService aiService;
+
+    public DocumentServiceImpl(AIService aiService) {
+        this.aiService = aiService;
+    }
 
     @Override
     public DocumentUploadResponseDTO uploadDocument(MultipartFile file) {
@@ -46,11 +54,15 @@ public class DocumentServiceImpl implements DocumentService {
             throw new FileProcessingException("Error while extracting document text.", e);
         }
 
+        // Generate AI Executive Summary
+        String executiveSummary = aiService.generateExecutiveSummary(extractedText);
+
         return DocumentUploadResponseDTO.builder()
                 .fileName(file.getOriginalFilename())
                 .documentType(documentType)
                 .status("Uploaded Successfully")
                 .extractedText(extractedText)
+                .executiveSummary(executiveSummary)
                 .build();
     }
 }

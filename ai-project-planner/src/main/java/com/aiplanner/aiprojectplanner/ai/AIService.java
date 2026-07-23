@@ -1,4 +1,7 @@
 package com.aiplanner.aiprojectplanner.ai;
 
-public class AIService {
+public interface AIService {
+
+    String generateExecutiveSummary(String documentText);
+
 }
