@@ -6,6 +6,6 @@ public enum ProjectStatus {
     ANALYZING,
     ANALYZED,
     PLANNED,
-    FAILED
+    IN_PROGRESS, FAILED
 
 }

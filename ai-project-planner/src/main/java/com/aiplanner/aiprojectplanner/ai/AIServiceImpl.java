@@ -1,5 +1,7 @@
 package com.aiplanner.aiprojectplanner.ai;
 
+import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
+import com.aiplanner.aiprojectplanner.enums.ProjectStatus;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,30 @@ public class AIServiceImpl implements AIService {
     }
 
     @Override
-    public String generateExecutiveSummary(String documentText) {
+    public ProjectResponseDTO analyzeProject(String documentText) {
+
+        System.out.println("STEP 5 - Building prompt");
 
         String prompt = PromptBuilder.buildExecutiveSummaryPrompt(documentText);
 
-        return chatClient
+        System.out.println("STEP 6 - Calling AI...");
+
+        String aiResponse = chatClient
                 .prompt(prompt)
                 .call()
                 .content();
+        System.out.println("STEP 7 - AI returned");
+
+
+        return ProjectResponseDTO.builder()
+                .projectName("AI Generated Project")
+                .executiveSummary(aiResponse)
+                .projectObjective("")
+                .timeline("")
+                .resourceRecommendation("")
+                .technologyStack("")
+                .riskAnalysis("")
+                .status(ProjectStatus.ANALYZED)
+                .build();
     }
 }

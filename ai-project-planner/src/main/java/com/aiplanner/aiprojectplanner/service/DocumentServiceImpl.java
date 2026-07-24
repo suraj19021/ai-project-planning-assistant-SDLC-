@@ -4,8 +4,7 @@ import com.aiplanner.aiprojectplanner.ai.AIService;
 import com.aiplanner.aiprojectplanner.document.DocxExtractor;
 import com.aiplanner.aiprojectplanner.document.PDFExtractor;
 import com.aiplanner.aiprojectplanner.document.TextExtractor;
-import com.aiplanner.aiprojectplanner.dto.AIProjectAnalysisDTO;
-import com.aiplanner.aiprojectplanner.dto.DocumentUploadResponseDTO;
+import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
 import com.aiplanner.aiprojectplanner.enums.DocumentType;
 import com.aiplanner.aiprojectplanner.exception.FileProcessingException;
 import com.aiplanner.aiprojectplanner.util.FileUtil;
@@ -24,9 +23,13 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public DocumentUploadResponseDTO uploadDocument(MultipartFile file) {
+    public ProjectResponseDTO uploadDocument(MultipartFile file) {
+
+        System.out.println("STEP 1 - Upload received");
 
         DocumentType documentType = FileUtil.getDocumentType(file);
+
+        System.out.println("STEP 2 - Document type: " + documentType);
 
         String extractedText;
 
@@ -54,15 +57,28 @@ public class DocumentServiceImpl implements DocumentService {
             throw new FileProcessingException("Error while extracting document text.", e);
         }
 
-        // Generate AI Executive Summary
-        String executiveSummary = aiService.generateExecutiveSummary(extractedText);
+        System.out.println("STEP 3 - Text extracted successfully");
 
-        return DocumentUploadResponseDTO.builder()
-                .fileName(file.getOriginalFilename())
-                .documentType(documentType)
-                .status("Uploaded Successfully")
-                .extractedText(extractedText)
-                .executiveSummary(executiveSummary)
-                .build();
+        ProjectResponseDTO response = aiService.analyzeProject(extractedText);
+
+        System.out.println("STEP 4 - AI analysis completed");
+
+        // Extract project name from uploaded file name
+        String fileName = file.getOriginalFilename();
+
+        if (fileName != null && !fileName.isBlank()) {
+
+            int lastDot = fileName.lastIndexOf('.');
+
+            String projectName = (lastDot > 0)
+                    ? fileName.substring(0, lastDot)
+                    : fileName;
+
+            response.setProjectName(projectName);
+        } else {
+            response.setProjectName("Untitled Project");
+        }
+
+        return response;
     }
 }

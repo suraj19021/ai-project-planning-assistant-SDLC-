@@ -1,6 +1,5 @@
 package com.aiplanner.aiprojectplanner.controller;
 
-import com.aiplanner.aiprojectplanner.dto.DocumentUploadResponseDTO;
 import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
 import com.aiplanner.aiprojectplanner.report.PDFReportGenerator;
 import com.aiplanner.aiprojectplanner.service.DocumentService;
@@ -19,30 +18,20 @@ public class ProjectController {
 
     public ProjectController(DocumentService documentService,
                              PDFReportGenerator pdfReportGenerator) {
+
         this.documentService = documentService;
         this.pdfReportGenerator = pdfReportGenerator;
     }
 
-    /**
-     * Upload Requirement Document
-     */
-    @PostMapping("/upload")
-    public ResponseEntity<DocumentUploadResponseDTO> uploadDocument(
+    @PostMapping(value = "/upload", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> uploadDocument(
             @RequestParam("file") MultipartFile file) {
 
-        DocumentUploadResponseDTO response = documentService.uploadDocument(file);
+        ProjectResponseDTO projectResponse =
+                documentService.uploadDocument(file);
 
-        return ResponseEntity.ok(response);
-    }
-
-    /**
-     * Generate AI Project Report PDF
-     */
-    @PostMapping(value = "/report", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> generateReport(
-            @RequestBody ProjectResponseDTO projectResponseDTO) {
-
-        byte[] pdf = pdfReportGenerator.generateProjectReport(projectResponseDTO);
+        byte[] pdf =
+                pdfReportGenerator.generateProjectReport(projectResponse);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
@@ -50,4 +39,5 @@ public class ProjectController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
+
 }
