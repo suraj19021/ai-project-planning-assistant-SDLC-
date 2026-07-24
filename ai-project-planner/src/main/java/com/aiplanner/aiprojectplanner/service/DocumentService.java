@@ -1,10 +1,9 @@
 package com.aiplanner.aiprojectplanner.service;
 
-import com.aiplanner.aiprojectplanner.dto.DocumentUploadResponseDTO;
+import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface DocumentService {
 
-    DocumentUploadResponseDTO uploadDocument(MultipartFile file);
-
+    ProjectResponseDTO uploadDocument(MultipartFile file);
 }

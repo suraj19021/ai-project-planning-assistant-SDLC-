@@ -1,7 +1,9 @@
 package com.aiplanner.aiprojectplanner.ai;
 
+import com.aiplanner.aiprojectplanner.dto.ProjectResponseDTO;
+
 public interface AIService {
 
-    String generateExecutiveSummary(String documentText);
+    ProjectResponseDTO analyzeProject(String documentText);
 
 }
