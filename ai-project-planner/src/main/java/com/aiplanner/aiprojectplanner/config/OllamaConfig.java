@@ -2,14 +2,26 @@ package com.aiplanner.aiprojectplanner.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OllamaConfig {
 
+
     @Bean
     public ChatClient chatClient(OllamaChatModel chatModel) {
+
         return ChatClient.create(chatModel);
     }
+
+
+    @Bean
+    public EmbeddingModel embeddingModel(
+            EmbeddingModel embeddingModel) {
+
+        return embeddingModel;
+    }
+
 }
