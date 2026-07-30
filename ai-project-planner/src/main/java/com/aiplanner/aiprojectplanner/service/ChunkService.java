@@ -6,10 +6,18 @@ import java.util.List;
 
 public interface ChunkService {
 
+
     List<DocumentChunk> saveChunks(
             List<DocumentChunk> chunks
     );
 
+
     List<DocumentChunk> getAllChunks();
+
+
+    void processDocument(
+            Long documentId,
+            String documentText
+    );
 
 }

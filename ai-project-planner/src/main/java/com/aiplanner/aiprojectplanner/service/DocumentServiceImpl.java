@@ -31,18 +31,25 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final ProjectMapper projectMapper;
 
+    private final ChunkService chunkService;
+
+
 
     public DocumentServiceImpl(
             AIService aiService,
             ProjectRepository projectRepository,
             DocumentRepository documentRepository,
-            ProjectMapper projectMapper) {
+            ProjectMapper projectMapper,
+            ChunkService chunkService
+    ) {
 
         this.aiService = aiService;
         this.projectRepository = projectRepository;
         this.documentRepository = documentRepository;
         this.projectMapper = projectMapper;
+        this.chunkService = chunkService;
     }
+
 
 
     @Override
@@ -52,15 +59,20 @@ public class DocumentServiceImpl implements DocumentService {
         System.out.println("STEP 1 - Upload received");
 
 
-        DocumentType documentType = FileUtil.getDocumentType(file);
+        DocumentType documentType =
+                FileUtil.getDocumentType(file);
+
 
 
         System.out.println(
-                "STEP 2 - Document type: " + documentType
+                "STEP 2 - Document type: "
+                        + documentType
         );
 
 
+
         String extractedText;
+
 
 
         try {
@@ -71,23 +83,29 @@ public class DocumentServiceImpl implements DocumentService {
 
                 case PDF:
 
-                    extractedText = PDFExtractor.extract(file);
+                    extractedText =
+                            PDFExtractor.extract(file);
 
                     break;
+
 
 
                 case DOCX:
 
-                    extractedText = DocxExtractor.extract(file);
+                    extractedText =
+                            DocxExtractor.extract(file);
 
                     break;
+
 
 
                 case TXT:
 
-                    extractedText = TextExtractor.extract(file);
+                    extractedText =
+                            TextExtractor.extract(file);
 
                     break;
+
 
 
                 default:
@@ -98,6 +116,7 @@ public class DocumentServiceImpl implements DocumentService {
             }
 
 
+
         } catch (IOException e) {
 
 
@@ -106,6 +125,7 @@ public class DocumentServiceImpl implements DocumentService {
                     e
             );
         }
+
 
 
         System.out.println(
@@ -127,15 +147,16 @@ public class DocumentServiceImpl implements DocumentService {
 
 
 
-        // Extract project name from uploaded file
+        String fileName =
+                file.getOriginalFilename();
 
-        String fileName = file.getOriginalFilename();
 
 
         if(fileName != null && !fileName.isBlank()) {
 
 
-            int lastDot = fileName.lastIndexOf(".");
+            int lastDot =
+                    fileName.lastIndexOf(".");
 
 
             String projectName =
@@ -144,7 +165,10 @@ public class DocumentServiceImpl implements DocumentService {
                             : fileName;
 
 
-            response.setProjectName(projectName);
+
+            response.setProjectName(
+                    projectName
+            );
 
 
         } else {
@@ -153,7 +177,6 @@ public class DocumentServiceImpl implements DocumentService {
             response.setProjectName(
                     "Untitled Project"
             );
-
         }
 
 
@@ -165,14 +188,12 @@ public class DocumentServiceImpl implements DocumentService {
 
 
 
-        // Convert DTO to Entity
+        // Save Project
 
         Project project =
                 projectMapper.toEntity(response);
 
 
-
-        // Save Project
 
         Project savedProject =
                 projectRepository.save(project);
@@ -189,9 +210,9 @@ public class DocumentServiceImpl implements DocumentService {
 
         // Save Uploaded Document
 
-
         RequirementDocument document =
                 new RequirementDocument();
+
 
 
         document.setFileName(
@@ -199,9 +220,11 @@ public class DocumentServiceImpl implements DocumentService {
         );
 
 
+
         document.setFileType(
                 documentType.name()
         );
+
 
 
         document.setContent(
@@ -209,17 +232,38 @@ public class DocumentServiceImpl implements DocumentService {
         );
 
 
+
         document.setProject(
                 savedProject
         );
 
 
-        documentRepository.save(document);
+
+        RequirementDocument savedDocument =
+                documentRepository.save(document);
 
 
 
         System.out.println(
                 "STEP 7 - Document saved successfully"
+        );
+
+
+
+        // RAG Processing
+        // Split document into chunks
+        // Generate embeddings
+        // Store in document_chunks table
+
+        chunkService.processDocument(
+                savedDocument.getId(),
+                extractedText
+        );
+
+
+
+        System.out.println(
+                "STEP 8 - Document chunks created successfully"
         );
 
 

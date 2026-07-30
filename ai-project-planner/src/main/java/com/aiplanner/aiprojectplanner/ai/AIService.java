@@ -6,4 +6,6 @@ public interface AIService {
 
     ProjectResponseDTO analyzeProject(String documentText);
 
+    String askQuestion(String question);
+
 }
