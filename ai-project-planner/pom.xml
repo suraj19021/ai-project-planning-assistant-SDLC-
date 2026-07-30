@@ -31,7 +31,7 @@
     </properties>
 
 
-    <!-- Spring AI Version Management -->
+    <!-- Spring AI Dependency Management -->
     <dependencyManagement>
 
         <dependencies>
@@ -59,10 +59,17 @@
         </dependency>
 
 
-        <!-- JPA -->
+        <!-- JPA + Hibernate -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+
+        <!-- Hibernate Vector Support for pgvector -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-vector</artifactId>
         </dependency>
 
 
@@ -84,7 +91,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
 
@@ -104,7 +110,7 @@
         </dependency>
 
 
-        <!-- PDF Extraction -->
+        <!-- PDF Text Extraction -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
@@ -112,7 +118,7 @@
         </dependency>
 
 
-        <!-- DOCX Extraction -->
+        <!-- DOCX Text Extraction -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -151,6 +157,7 @@
 
                 <artifactId>spring-boot-maven-plugin</artifactId>
 
+
                 <configuration>
 
                     <excludes>
@@ -172,7 +179,6 @@
 
 
             <!-- Lombok Annotation Processing -->
-
             <plugin>
 
                 <groupId>org.apache.maven.plugins</groupId>
@@ -192,18 +198,14 @@
 
                         </path>
 
-
                     </annotationProcessorPaths>
 
-
                 </configuration>
-
 
             </plugin>
 
 
         </plugins>
-
 
     </build>
 

@@ -2,13 +2,18 @@ package com.aiplanner.aiprojectplanner.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Array;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "document_chunks")
 @Data
 public class DocumentChunk {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +24,20 @@ public class DocumentChunk {
     private Long documentId;
 
 
-    @Column(name = "chunk_text", columnDefinition = "TEXT")
+    @Column(
+            name = "chunk_text",
+            columnDefinition = "TEXT"
+    )
     private String chunkText;
 
 
-    /*
-       PostgreSQL pgvector column
-
-       Temporary mapping.
-       Later we can use Hibernate Vector support.
-    */
-    @Column(columnDefinition = "vector(768)")
-    private String embedding;
+    @JdbcTypeCode(SqlTypes.VECTOR)
+    @Array(length = 768)
+    @Column(
+            name = "embedding",
+            columnDefinition = "vector(768)"
+    )
+    private float[] embedding;
 
 
     @Column(name = "created_at")
@@ -38,7 +45,10 @@ public class DocumentChunk {
 
 
     @PrePersist
-    protected void onCreate() {
+    protected void onCreate(){
+
         createdAt = LocalDateTime.now();
+
     }
+
 }

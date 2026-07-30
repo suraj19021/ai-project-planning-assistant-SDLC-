@@ -17,7 +17,7 @@ public interface ChunkRepository extends JpaRepository<DocumentChunk, Long> {
         SELECT *
         FROM document_chunks
         ORDER BY embedding <-> CAST(:embedding AS vector)
-        LIMIT :limit
+        LIMIT CAST(:limit AS INTEGER)
         """,
             nativeQuery = true
     )
