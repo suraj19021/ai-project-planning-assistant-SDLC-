@@ -32,7 +32,7 @@ public class DocumentChunk {
 
 
     @JdbcTypeCode(SqlTypes.VECTOR)
-    @Array(length = 768)
+    //@Array(length = 768)
     @Column(
             name = "embedding",
             columnDefinition = "vector(768)"
